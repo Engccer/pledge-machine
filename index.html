@@ -727,6 +727,7 @@ body {
 <div class="toast" id="toast"></div>
 
 <script src="pledge_data.js"></script>
+<script src="sfx_data.js"></script>
 <script>
 // ===== STATE =====
 const State = {
@@ -744,6 +745,7 @@ const AudioMgr = {
   ctx: null,
   masterGain: null,
   initialized: false,
+  sfxCache: {},
 
   init() {
     if (this.initialized) return;
@@ -759,6 +761,24 @@ const AudioMgr = {
   setMuted(muted) {
     State.isMuted = muted;
     if (this.masterGain) this.masterGain.gain.value = muted ? 0 : 0.25;
+  },
+
+  // Play ElevenLabs SFX from base64 bundle (preferred)
+  async _playSfx(key) {
+    if (!this.initialized || State.isMuted) return false;
+    if (typeof SFX_DATA === 'undefined' || !SFX_DATA[key]) return false;
+    try {
+      if (!this.sfxCache[key]) {
+        const resp = await fetch(SFX_DATA[key]);
+        const buf = await resp.arrayBuffer();
+        this.sfxCache[key] = await this.ctx.decodeAudioData(buf);
+      }
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.sfxCache[key];
+      src.connect(this.masterGain);
+      src.start();
+      return true;
+    } catch { return false; }
   },
 
   _tone(freq, dur, type, vol) {
@@ -791,22 +811,26 @@ const AudioMgr = {
     src.start(); src.stop(this.ctx.currentTime + dur);
   },
 
-  playLeverPull() {
+  async playLeverPull() {
+    if (await this._playSfx('lever_pull')) return;
     this._tone(200, 0.15, 'square', 0.2);
     setTimeout(() => this._tone(120, 0.1, 'triangle', 0.15), 100);
     setTimeout(() => this._noise(0.2, 0.1), 150);
   },
 
   playReelTick() {
+    // Tick uses Web Audio synthesis only (too rapid for file playback)
     this._tone(800 + Math.random() * 400, 0.03, 'square', 0.08);
   },
 
-  playReelStop() {
+  async playReelStop() {
+    if (await this._playSfx('reel_stop')) return;
     this._tone(880, 0.12, 'sine', 0.25);
     setTimeout(() => this._tone(1100, 0.08, 'sine', 0.15), 80);
   },
 
-  playFanfare() {
+  async playFanfare() {
+    if (await this._playSfx('fanfare')) return;
     const notes = [523, 659, 784, 1047];
     notes.forEach((f, i) => {
       setTimeout(() => this._tone(f, 0.4, 'sine', 0.2), i * 120);
@@ -814,11 +838,13 @@ const AudioMgr = {
     setTimeout(() => this._noise(0.3, 0.08), 500);
   },
 
-  playClick() {
+  async playClick() {
+    if (await this._playSfx('button_click')) return;
     this._tone(1000, 0.04, 'sine', 0.12);
   },
 
-  playCopySuccess() {
+  async playCopySuccess() {
+    if (await this._playSfx('copy_success')) return;
     this._tone(880, 0.15, 'sine', 0.2);
     setTimeout(() => this._tone(1320, 0.2, 'sine', 0.18), 100);
   }
@@ -914,6 +940,9 @@ function spin() {
   preview.classList.remove('visible');
 
   announce('릴이 돌아갑니다...');
+
+  // Play reel spin sound after lever pull
+  setTimeout(() => AudioMgr._playSfx('reel_spin'), 300);
 
   State.result = generateResult();
   const ih = getItemHeight();
