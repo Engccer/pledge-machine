@@ -589,8 +589,10 @@ const State = {
   phase: 'select' // select | center | cracked
 };
 
-// Google Form URL — PLACEHOLDER, 실제 Form 생성 후 교체
-const GOOGLE_FORM_URL = 'https://forms.google.com/placeholder';
+// Google Form
+const FORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLScbltSg7xnYNCRK_5zmis44n2415T-T92osskdD5X2W0Zo8aw/viewform';
+const ENTRY_FORTUNE = 'entry.1952355422';
+const ENTRY_EXTRA = 'entry.1029193054';
 
 // ===== AUDIO =====
 const AudioMgr = {
@@ -813,12 +815,12 @@ async function submitResult() {
 }
 
 function buildFormUrl() {
-  // Google Form pre-fill URL
-  // entry IDs will be set after Form creation
   const fortune = FORTUNES[State.fortuneIndex];
   const extra = document.getElementById('extra-message').value.trim();
-  // Placeholder — will be replaced with actual entry IDs
-  return GOOGLE_FORM_URL;
+  const params = new URLSearchParams();
+  params.set(ENTRY_FORTUNE, fortune);
+  if (extra) params.set(ENTRY_EXTRA, extra);
+  return FORM_BASE + '?' + params.toString();
 }
 
 // ===== INIT =====
