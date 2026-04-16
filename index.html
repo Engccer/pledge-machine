@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>교육감 공약 뽑기 기계 — 새 교육감에게 바란다</title>
-<meta name="description" content="장애인주간 기념 이벤트 — 슬롯머신을 돌려 교육감에게 바라는 공약을 뽑아보세요!">
+<title>새 교육감에게 바란다 — 포춘 쿠키</title>
+<meta name="description" content="장애인주간 기념 이벤트 — 포춘 쿠키를 깨고, 새 교육감에게 바라는 한마디를 전해 보세요.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #1a0a2e;
-  --bg2: #2d1b4e;
-  --card: #261447;
-  --accent: #ffd700;
-  --accent2: #ff6b35;
-  --correct: #00e676;
-  --text: #f0f0f0;
-  --text-dim: #b8a8d0;
-  --machine-border: linear-gradient(135deg, #c9a84c, #ffd700, #c9a84c, #8b6914);
-  --machine-body: linear-gradient(180deg, #3d2066 0%, #261447 50%, #1a0a2e 100%);
+  --bg: #1a1410;
+  --bg2: #231c14;
+  --card: #2a2018;
+  --accent: #d4a753;
+  --accent-dim: #a07d3a;
+  --text: #f5efe6;
+  --text-dim: #b8a890;
+  --paper: #faf3e0;
+  --paper-text: #3d2e1a;
+  --crack: #8b6914;
 }
 
 html, body {
@@ -40,17 +40,15 @@ body {
   padding: 1em;
 }
 
-/* Background */
 #bg-image {
   position: fixed;
   inset: 0;
   background: url('bg.png') center/cover no-repeat;
-  opacity: 0.15;
+  opacity: 0.12;
   z-index: 0;
   pointer-events: none;
 }
 
-/* Container */
 .container {
   position: relative;
   z-index: 1;
@@ -63,11 +61,9 @@ body {
   justify-content: center;
 }
 
-/* Screen switching */
 .screen { display: none; flex-direction: column; align-items: center; width: 100%; }
 .screen.active { display: flex; }
 
-/* Mute button */
 #mute-btn {
   position: fixed;
   top: 12px;
@@ -76,10 +72,10 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid var(--accent);
-  background: rgba(26, 10, 46, 0.85);
+  border: 1px solid var(--accent-dim);
+  background: rgba(26, 20, 16, 0.85);
   color: var(--text);
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -88,12 +84,11 @@ body {
   transition: background 0.2s;
 }
 #mute-btn:hover, #mute-btn:focus {
-  background: rgba(255, 215, 0, 0.2);
-  outline: 3px solid var(--accent);
+  background: rgba(212, 167, 83, 0.2);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* SR announce */
 #sr-announce {
   position: absolute;
   width: 1px; height: 1px;
@@ -103,247 +98,281 @@ body {
 }
 
 /* ===== SCREEN 1: START ===== */
-#start-screen { text-align: center; animation: fadeIn 0.6s ease; gap: 1em; }
+#start-screen { text-align: center; animation: fadeIn 0.8s ease; gap: 1.2em; }
 
-.logo-area {
-  font-size: 0.85rem;
+.org-name {
+  font-size: 0.8rem;
   color: var(--text-dim);
-  margin-bottom: 0.5em;
+  letter-spacing: 2px;
 }
 
-.title {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 2.6rem;
+.main-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 2.2rem;
+  font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 3px 0 #8b6914;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
-.subtitle {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.5rem;
-  color: var(--accent2);
-  margin-top: 0.2em;
+.main-subtitle {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  line-height: 1.5;
 }
 
-.event-badge {
+.event-period {
   display: inline-block;
-  background: linear-gradient(135deg, var(--accent2), #ff8c42);
-  color: #fff;
+  border: 1px solid var(--accent-dim);
   padding: 0.3em 1em;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-top: 0.3em;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 1px;
 }
 
 .desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-dim);
-  line-height: 1.6;
+  line-height: 1.7;
   max-width: 400px;
-  margin: 0.5em auto;
+  margin: 0 auto;
 }
 
-.start-btn {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.8rem;
-  padding: 0.5em 2em;
-  background: linear-gradient(135deg, var(--accent), #ffed4a);
-  color: #1a0a2e;
+.primary-btn {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.7em 2em;
+  background: var(--accent);
+  color: var(--bg);
   border: none;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
   transition: transform 0.2s, box-shadow 0.2s;
   touch-action: manipulation;
-  min-height: 56px;
+  min-height: 52px;
 }
-.start-btn:hover, .start-btn:focus {
-  transform: scale(1.06);
-  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
-  outline: 3px solid var(--accent2);
-  outline-offset: 4px;
+.primary-btn:hover, .primary-btn:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(212, 167, 83, 0.3);
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
 }
 
 .gift-note {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
-  margin-top: 0.5em;
 }
 
-/* ===== SCREEN 2: SLOT MACHINE ===== */
-#slot-screen { animation: fadeIn 0.4s ease; gap: 1.2em; }
+/* ===== SCREEN 2: COOKIE SELECT + CRACK ===== */
+#cookie-screen { animation: fadeIn 0.5s ease; gap: 1em; }
 
-.machine-frame {
-  background: var(--machine-body);
-  border: 4px solid;
-  border-image: var(--machine-border) 1;
-  border-radius: 16px;
-  padding: 1.5em 1em;
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 2px 20px rgba(0,0,0,0.3);
-  width: 100%;
-  max-width: 460px;
-}
-
-.machine-title {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.3rem;
-  color: var(--accent);
+.cookie-prompt {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1.2rem;
+  color: var(--text);
   text-align: center;
-  margin-bottom: 1em;
 }
 
-.reels-container {
+.cookie-grid {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 1.2em;
+  gap: 16px;
+  padding: 1em 0;
 }
 
-.reel-wrapper {
-  flex: 1;
-  max-width: 150px;
-}
-
-.reel-label {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.reel-window {
-  height: 60px;
-  overflow: hidden;
-  background: rgba(0,0,0,0.4);
-  border: 2px solid var(--accent);
-  border-radius: 10px;
+.cookie-btn {
+  width: 90px;
+  height: 90px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 167, 83, 0.12) 0%, transparent 70%);
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+  touch-action: manipulation;
+  padding: 12px;
   position: relative;
+  animation: cookieFloat 3s ease-in-out infinite;
+  overflow: hidden;
+}
+.cookie-btn:nth-child(2) { animation-delay: 0.4s; }
+.cookie-btn:nth-child(3) { animation-delay: 0.8s; }
+.cookie-btn:nth-child(4) { animation-delay: 1.2s; }
+.cookie-btn:nth-child(5) { animation-delay: 1.6s; }
+.cookie-btn:nth-child(6) { animation-delay: 2.0s; }
+.cookie-btn:nth-child(7) { animation-delay: 2.4s; }
+
+.cookie-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  mix-blend-mode: multiply;
 }
 
-.reel-window::before,
-.reel-window::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  height: 12px;
-  z-index: 2;
+.cookie-btn:hover, .cookie-btn:focus {
+  border-color: var(--accent);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(212, 167, 83, 0.25);
+  outline: none;
+}
+
+.cookie-btn.fading {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.5s ease, transform 0.5s ease;
   pointer-events: none;
 }
-.reel-window::before {
-  top: 0;
-  background: linear-gradient(to bottom, rgba(26,10,46,0.8), transparent);
-}
-.reel-window::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(26,10,46,0.8), transparent);
-}
 
-.reel-strip {
-  transition: transform 0.1s linear;
-}
-
-.reel-item {
-  height: 60px;
-  display: flex;
+/* Selected cookie — center stage */
+.cookie-center {
+  display: none;
+  flex-direction: column;
   align-items: center;
+  gap: 1em;
+}
+.cookie-center.active { display: flex; }
+
+.cookie-hero {
+  width: 150px;
+  height: 150px;
+  animation: cookiePulse 1.5s ease-in-out infinite;
+  cursor: pointer;
+  touch-action: manipulation;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+.cookie-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.crack-prompt {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1rem;
+  color: var(--accent);
+  animation: fadeIn 0.5s ease;
+}
+
+/* Cracked state */
+.cookie-cracked {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  width: 100%;
+}
+.cookie-cracked.active { display: flex; }
+
+.crack-halves {
+  display: flex;
   justify-content: center;
+  gap: 0;
+  height: 80px;
+  overflow: hidden;
+}
+.crack-half {
+  width: 75px;
+  height: 80px;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.crack-half img {
+  width: 150px;
+  height: 80px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.crack-half.left img { object-position: right; }
+.crack-half.right img { object-position: left; transform: scaleX(-1); }
+.crack-halves.split .crack-half.left { transform: translateX(-20px) rotate(-8deg); }
+.crack-halves.split .crack-half.right { transform: translateX(20px) rotate(8deg); }
+
+/* Fortune paper */
+.fortune-paper {
+  background: var(--paper);
+  color: var(--paper-text);
+  border-radius: 4px;
+  padding: 1.5em;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
   text-align: center;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 0 6px;
-  color: var(--text);
+  position: relative;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
   word-break: keep-all;
 }
+.fortune-paper.unfolded { transform: scaleY(1); }
 
-.reel-window.spinning .reel-strip {
-  filter: blur(1.5px);
-}
-
-.reel-window.stopped {
-  border-color: var(--correct);
-  box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
-}
-
-.spin-btn {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.5rem;
-  padding: 0.5em 1.5em;
-  background: linear-gradient(135deg, var(--accent2), #ff8c42);
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-  touch-action: manipulation;
-  min-height: 56px;
-  width: 100%;
-  max-width: 300px;
-}
-.spin-btn:hover, .spin-btn:focus {
-  transform: scale(1.05);
-  box-shadow: 0 6px 24px rgba(255, 107, 53, 0.6);
-  outline: 3px solid var(--accent);
-  outline-offset: 4px;
-}
-.spin-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+.fortune-paper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: rgba(61, 46, 26, 0.1);
 }
 
-.result-preview {
-  text-align: center;
-  font-size: 1.1rem;
+.fortune-text {
+  min-height: 3em;
+}
+
+.paper-actions {
+  display: flex;
+  gap: 0.8em;
+  margin-top: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.secondary-btn {
+  font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
-  color: var(--accent);
-  min-height: 1.5em;
-  margin-top: 0.5em;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.result-preview.visible { opacity: 1; }
-
-/* ===== SCREEN 3: CUSTOMIZE ===== */
-#customize-screen { animation: fadeIn 0.4s ease; gap: 1em; }
-
-.result-card-mini {
-  background: linear-gradient(135deg, #3d2066, #261447);
-  border: 2px solid var(--accent);
-  border-radius: 12px;
-  padding: 1em;
-  text-align: center;
-  width: 100%;
-  max-width: 460px;
-}
-
-.result-card-mini .combo {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.3rem;
-  color: var(--accent);
-  line-height: 1.4;
-}
-
-.respin-btn {
-  font-size: 0.9rem;
-  padding: 0.4em 1.2em;
+  font-size: 0.95rem;
+  padding: 0.6em 1.5em;
+  border: 1px solid var(--accent-dim);
   background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--text-dim);
-  border-radius: 20px;
+  color: var(--text);
+  border-radius: 8px;
   cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
   touch-action: manipulation;
-  min-height: 44px;
-  margin-top: 0.5em;
-  transition: border-color 0.2s, color 0.2s;
+  min-height: 48px;
 }
-.respin-btn:hover, .respin-btn:focus {
+.secondary-btn:hover, .secondary-btn:focus {
   border-color: var(--accent);
-  color: var(--accent);
+  background: rgba(212, 167, 83, 0.1);
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* ===== SCREEN 3: COMPLETE ===== */
+#complete-screen { animation: fadeIn 0.5s ease; gap: 1em; }
+
+.result-fortune {
+  background: var(--paper);
+  color: var(--paper-text);
+  border-radius: 4px;
+  padding: 1.5em;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  text-align: center;
+  word-break: keep-all;
 }
 
 .form-area {
@@ -355,139 +384,34 @@ body {
 }
 
 .form-area label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-dim);
   font-weight: 700;
 }
 
-.form-area textarea,
-.form-area input,
-.form-area select {
+.form-area textarea {
   width: 100%;
   padding: 0.7em;
-  border: 2px solid #4a3570;
-  border-radius: 8px;
+  border: 1px solid #4a3a28;
+  border-radius: 6px;
   background: rgba(0,0,0,0.3);
   color: var(--text);
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 1rem;
-  min-height: 48px;
+  font-size: 0.95rem;
+  min-height: 80px;
+  resize: vertical;
   transition: border-color 0.2s;
 }
-.form-area textarea:focus,
-.form-area input:focus,
-.form-area select:focus {
+.form-area textarea:focus {
   border-color: var(--accent);
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
-.form-area textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.form-area select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b8a8d0' fill='none' stroke-width='2'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-}
-
-.form-area select option {
-  background: #261447;
-  color: var(--text);
-}
-
-.submit-btn {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.3rem;
-  padding: 0.5em 1.5em;
-  background: linear-gradient(135deg, var(--accent), #ffed4a);
-  color: #1a0a2e;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
-  transition: transform 0.2s;
-  touch-action: manipulation;
-  min-height: 52px;
-  margin-top: 0.5em;
-}
-.submit-btn:hover, .submit-btn:focus {
-  transform: scale(1.04);
-  outline: 3px solid var(--accent2);
-  outline-offset: 4px;
-}
-
-.validation-msg {
-  color: var(--accent2);
-  font-size: 0.85rem;
-  min-height: 1.2em;
-}
-
-/* ===== SCREEN 4: RESULT ===== */
-#result-screen { animation: fadeIn 0.4s ease; gap: 1em; }
-
-.result-card {
-  background: linear-gradient(135deg, #3d2066 0%, #1a0a2e 50%, #261447 100%);
-  border: 3px solid var(--accent);
-  border-radius: 16px;
-  padding: 1.5em;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-  animation: goldPulse 2s ease-in-out infinite;
-}
-
-.result-card .header-emoji {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 0.3em;
-}
-
-.result-card .result-title {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.1rem;
+.form-area .optional-tag {
+  font-size: 0.75rem;
   color: var(--text-dim);
-  text-align: center;
-  margin-bottom: 0.8em;
-}
-
-.result-card .combo-line {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.4rem;
-  color: var(--accent);
-  text-align: center;
-  line-height: 1.4;
-  margin-bottom: 1em;
-  word-break: keep-all;
-}
-
-.result-card .message-line {
-  font-size: 1rem;
-  color: var(--text);
-  line-height: 1.6;
-  padding: 0.8em;
-  background: rgba(0,0,0,0.2);
-  border-radius: 8px;
-  border-left: 3px solid var(--accent);
-  margin-bottom: 0.8em;
-  word-break: keep-all;
-}
-
-.result-card .attribution {
-  text-align: right;
-  font-size: 0.9rem;
-  color: var(--text-dim);
-}
-
-.result-card .hashtags {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--accent2);
-  margin-top: 0.8em;
+  font-weight: 400;
 }
 
 .action-btns {
@@ -498,64 +422,27 @@ body {
   max-width: 460px;
 }
 
-.copy-btn {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.3rem;
-  padding: 0.5em 1.5em;
-  background: linear-gradient(135deg, var(--accent), #ffed4a);
-  color: #1a0a2e;
-  border: none;
-  border-radius: 50px;
+.blog-link {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.6em 1.5em;
+  background: rgba(212, 167, 83, 0.15);
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
-  transition: transform 0.2s;
-  touch-action: manipulation;
-  min-height: 52px;
-}
-.copy-btn:hover, .copy-btn:focus {
-  transform: scale(1.04);
-  outline: 3px solid var(--accent2);
-  outline-offset: 4px;
-}
-
-.blog-btn {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 1.1rem;
-  padding: 0.5em 1.5em;
-  background: linear-gradient(135deg, var(--accent2), #ff8c42);
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  transition: background 0.2s;
   touch-action: manipulation;
   min-height: 48px;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
-.blog-btn:hover, .blog-btn:focus {
-  transform: scale(1.04);
-  outline: 3px solid var(--accent);
-  outline-offset: 4px;
-}
-
-.retry-btn {
-  font-size: 0.9rem;
-  padding: 0.4em 1.2em;
-  background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--text-dim);
-  border-radius: 20px;
-  cursor: pointer;
-  touch-action: manipulation;
-  min-height: 44px;
-  transition: border-color 0.2s, color 0.2s;
-}
-.retry-btn:hover, .retry-btn:focus {
-  border-color: var(--accent);
-  color: var(--accent);
+.blog-link:hover, .blog-link:focus {
+  background: rgba(212, 167, 83, 0.25);
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -565,160 +452,124 @@ body {
   position: fixed;
   bottom: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--correct);
-  color: #1a0a2e;
-  padding: 0.7em 1.5em;
-  border-radius: 30px;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.6em 1.5em;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   z-index: 200;
   transition: transform 0.3s ease;
   pointer-events: none;
 }
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-}
+.toast.show { transform: translateX(-50%) translateY(0); }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes goldPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+@keyframes cookieFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes cookiePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-3px); }
-  40% { transform: translateX(3px); }
-  60% { transform: translateX(-2px); }
-  80% { transform: translateX(2px); }
-}
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  .reel-window.spinning .reel-strip { filter: none; }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
   body { padding: 0.5em; }
-  .title { font-size: 2rem; }
-  .subtitle { font-size: 1.2rem; }
-  .start-btn { font-size: 1.5rem; }
-  .machine-frame { padding: 1em 0.7em; }
-  .reel-item { font-size: 0.8rem; }
-  .reel-window { height: 52px; }
-  .reel-item { height: 52px; }
-  .result-card .combo-line { font-size: 1.2rem; }
-  .reels-container { gap: 5px; }
+  .main-title { font-size: 1.8rem; }
+  .cookie-btn { width: 72px; height: 72px; }
+  .cookie-hero { width: 120px; height: 120px; }
+  .cookie-grid { gap: 10px; }
+  .fortune-paper { font-size: 0.95rem; padding: 1em; }
 }
 </style>
 </head>
 <body>
 
 <div id="bg-image"></div>
-
-<button id="mute-btn" aria-label="효과음 끄기">🔊</button>
-
+<button id="mute-btn" aria-label="효과음 끄기">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/>
+  </svg>
+</button>
 <div id="sr-announce" role="status" aria-live="assertive" aria-atomic="true"></div>
 
 <div class="container">
 
   <!-- SCREEN 1: START -->
   <div id="start-screen" class="screen active">
-    <div class="logo-area">함께하는장애인교원노동조합</div>
-    <div class="title">🎰 교육감 공약<br>뽑기 기계</div>
-    <div class="subtitle">새 교육감에게 바란다</div>
-    <div class="event-badge">🎉 장애인주간 4.20 ~ 4.24</div>
+    <div class="org-name">함께하는장애인교원노동조합</div>
+    <h1 class="main-title">새 교육감에게<br>바란다</h1>
+    <p class="main-subtitle">포춘 쿠키를 깨고,<br>당신의 목소리를 담아보세요.</p>
+    <div class="event-period">장애인주간 2026. 4. 20. ~ 4. 24.</div>
     <p class="desc">
-      슬롯머신을 돌려 교육감에게 바라는 공약 조합을 뽑아보세요!<br>
-      나만의 한마디를 추가하여 블로그 댓글로 남기면,<br>
-      교육감 후보 면담 자료에 반영됩니다.
+      포춘 쿠키 안에는 장애인 교원의 바람이 담겨 있습니다.<br>
+      쿠키를 깨고 나온 메시지에 당신의 한마디를 더해<br>
+      새 교육감에게 전해 주세요.
     </p>
-    <button class="start-btn" id="start-btn">뽑기 시작!</button>
-    <p class="gift-note">🎁 참여자 전원 기프티콘(5천 원) 증정</p>
+    <button class="primary-btn" id="start-btn">쿠키 뽑으러 가기</button>
+    <p class="gift-note">참여자 전원 기프티콘(5천 원) 증정</p>
   </div>
 
-  <!-- SCREEN 2: SLOT MACHINE -->
-  <div id="slot-screen" class="screen">
-    <div class="machine-frame">
-      <div class="machine-title">🎰 교육감 공약 뽑기 기계</div>
-      <div class="reels-container">
-        <div class="reel-wrapper">
-          <div class="reel-label">누가</div>
-          <div class="reel-window" id="reel-0">
-            <div class="reel-strip" id="strip-0"></div>
-          </div>
-        </div>
-        <div class="reel-wrapper">
-          <div class="reel-label">어떻게</div>
-          <div class="reel-window" id="reel-1">
-            <div class="reel-strip" id="strip-1"></div>
-          </div>
-        </div>
-        <div class="reel-wrapper">
-          <div class="reel-label">무엇을</div>
-          <div class="reel-window" id="reel-2">
-            <div class="reel-strip" id="strip-2"></div>
-          </div>
-        </div>
+  <!-- SCREEN 2: COOKIE -->
+  <div id="cookie-screen" class="screen">
+    <!-- Phase 1: Cookie grid -->
+    <div id="cookie-select-phase">
+      <p class="cookie-prompt">하나를 골라 주세요</p>
+      <div class="cookie-grid" id="cookie-grid" role="group" aria-label="포춘 쿠키 7개 중 하나를 선택하세요">
+        <!-- 7 cookies generated by JS -->
       </div>
-      <div style="text-align:center">
-        <button class="spin-btn" id="spin-btn">🎰 레버 당기기!</button>
+    </div>
+
+    <!-- Phase 2: Selected cookie center -->
+    <div class="cookie-center" id="cookie-center-phase">
+      <button class="cookie-hero" id="cookie-hero" aria-label="쿠키를 깨려면 클릭하세요">
+        <img src="cookie.png" alt="">
+      </button>
+      <p class="crack-prompt">클릭하여 쿠키를 깨세요</p>
+    </div>
+
+    <!-- Phase 3: Cracked cookie + fortune paper -->
+    <div class="cookie-cracked" id="cookie-cracked-phase">
+      <div class="crack-halves" id="crack-halves">
+        <div class="crack-half left"><img src="cookie.png" alt=""></div>
+        <div class="crack-half right"><img src="cookie.png" alt=""></div>
       </div>
-      <div class="result-preview" id="result-preview"></div>
+      <div class="fortune-paper" id="fortune-paper">
+        <div class="fortune-text" id="fortune-text"></div>
+      </div>
+      <div class="paper-actions" id="paper-actions" style="display:none">
+        <button class="primary-btn" id="accept-btn">이 메시지로 참여하기</button>
+        <button class="secondary-btn" id="retry-btn">다시 뽑기</button>
+      </div>
     </div>
   </div>
 
-  <!-- SCREEN 3: CUSTOMIZE -->
-  <div id="customize-screen" class="screen">
-    <div class="result-card-mini">
-      <div class="combo" id="combo-display"></div>
-      <button class="respin-btn" id="respin-btn">🔄 다시 뽑기</button>
-    </div>
+  <!-- SCREEN 3: COMPLETE -->
+  <div id="complete-screen" class="screen">
+    <div class="result-fortune" id="result-fortune"></div>
     <div class="form-area">
       <div>
-        <label for="my-message">💬 나의 한마디 <span style="color:var(--accent2)">*</span></label>
-        <textarea id="my-message" placeholder="예: 장애인 교원이 당연하게 일할 수 있는 학교를 만들어 주세요" aria-required="true" maxlength="200"></textarea>
-        <div class="validation-msg" id="msg-validation"></div>
+        <label for="extra-message">한마디를 더 추가하고 싶다면 <span class="optional-tag">(선택)</span></label>
+        <textarea id="extra-message" placeholder="포춘 메시지만으로도 충분합니다. 추가로 하고 싶은 말이 있다면 적어 주세요." maxlength="300"></textarea>
       </div>
-      <div>
-        <label for="name-input">✏️ 이름 (선택)</label>
-        <input type="text" id="name-input" placeholder="예: 김○○" maxlength="20">
-      </div>
-      <div>
-        <label for="office-select">🏫 소속 교육청</label>
-        <select id="office-select">
-          <option value="">소속 교육청 선택</option>
-        </select>
-      </div>
-      <button class="submit-btn" id="submit-btn">결과 카드 만들기 ✨</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 4: RESULT -->
-  <div id="result-screen" class="screen">
-    <div class="result-card" id="result-card">
-      <div class="header-emoji">🎰</div>
-      <div class="result-title">나의 교육감 공약 뽑기 결과</div>
-      <div class="combo-line" id="final-combo"></div>
-      <div class="message-line" id="final-message"></div>
-      <div class="attribution" id="final-attribution"></div>
-      <div class="hashtags">#새교육감에게바란다 #장애인주간 #장교조</div>
     </div>
     <div class="action-btns">
-      <button class="copy-btn" id="copy-btn">📋 복사하기</button>
-      <a class="blog-btn" id="blog-btn" href="https://khudt.posthaven.com" target="_blank" rel="noopener noreferrer">📝 장교조 블로그로 이동 →</a>
-      <button class="retry-btn" id="retry-btn">🔄 다시 하기</button>
+      <button class="primary-btn" id="submit-btn">나의 한마디 완성하기</button>
+      <a class="blog-link" id="form-link" href="#" target="_blank" rel="noopener noreferrer">Google Form으로 제출하기</a>
+      <button class="secondary-btn" id="restart-btn">다시 하기</button>
     </div>
   </div>
 
@@ -726,26 +577,24 @@ body {
 
 <div class="toast" id="toast"></div>
 
-<script src="pledge_data.js"></script>
+<script src="fortune_data.js"></script>
 <script src="sfx_data.js"></script>
 <script>
 // ===== STATE =====
 const State = {
   currentScreen: 'start',
-  result: [0, 0, 0],
-  myMessage: '',
-  userName: '',
-  userOffice: '',
-  isSpinning: false,
-  isMuted: false
+  fortuneIndex: -1,
+  extraMessage: '',
+  isMuted: false,
+  phase: 'select' // select | center | cracked
 };
 
-// ===== AUDIO MANAGER (Web Audio API) =====
+// Google Form URL — PLACEHOLDER, 실제 Form 생성 후 교체
+const GOOGLE_FORM_URL = 'https://forms.google.com/placeholder';
+
+// ===== AUDIO =====
 const AudioMgr = {
-  ctx: null,
-  masterGain: null,
-  initialized: false,
-  sfxCache: {},
+  ctx: null, masterGain: null, initialized: false, sfxCache: {},
 
   init() {
     if (this.initialized) return;
@@ -753,20 +602,19 @@ const AudioMgr = {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       this.masterGain = this.ctx.createGain();
       this.masterGain.connect(this.ctx.destination);
-      this.masterGain.gain.value = 0.25;
+      this.masterGain.gain.value = 0.3;
       this.initialized = true;
-    } catch (e) { /* no audio support */ }
+    } catch (e) {}
   },
 
   setMuted(muted) {
     State.isMuted = muted;
-    if (this.masterGain) this.masterGain.gain.value = muted ? 0 : 0.25;
+    if (this.masterGain) this.masterGain.gain.value = muted ? 0 : 0.3;
   },
 
-  // Play ElevenLabs SFX from base64 bundle (preferred)
-  async _playSfx(key) {
-    if (!this.initialized || State.isMuted) return false;
-    if (typeof SFX_DATA === 'undefined' || !SFX_DATA[key]) return false;
+  async play(key) {
+    if (!this.initialized || State.isMuted) return;
+    if (typeof SFX_DATA === 'undefined' || !SFX_DATA[key]) return;
     try {
       if (!this.sfxCache[key]) {
         const resp = await fetch(SFX_DATA[key]);
@@ -777,76 +625,7 @@ const AudioMgr = {
       src.buffer = this.sfxCache[key];
       src.connect(this.masterGain);
       src.start();
-      return true;
-    } catch { return false; }
-  },
-
-  _tone(freq, dur, type, vol) {
-    if (!this.initialized || State.isMuted) return;
-    const osc = this.ctx.createOscillator();
-    const g = this.ctx.createGain();
-    osc.connect(g); g.connect(this.masterGain);
-    osc.type = type || 'sine';
-    osc.frequency.value = freq;
-    g.gain.setValueAtTime(vol || 0.3, this.ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + dur);
-    osc.start(this.ctx.currentTime);
-    osc.stop(this.ctx.currentTime + dur);
-  },
-
-  _noise(dur, vol) {
-    if (!this.initialized || State.isMuted) return;
-    const sr = this.ctx.sampleRate;
-    const buf = this.ctx.createBuffer(1, sr * dur, sr);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * dur * 0.5));
-    const src = this.ctx.createBufferSource();
-    const g = this.ctx.createGain();
-    const f = this.ctx.createBiquadFilter();
-    src.buffer = buf;
-    src.connect(f); f.connect(g); g.connect(this.masterGain);
-    f.type = 'bandpass'; f.frequency.value = 2000; f.Q.value = 0.5;
-    g.gain.setValueAtTime(vol || 0.15, this.ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + dur);
-    src.start(); src.stop(this.ctx.currentTime + dur);
-  },
-
-  async playLeverPull() {
-    if (await this._playSfx('lever_pull')) return;
-    this._tone(200, 0.15, 'square', 0.2);
-    setTimeout(() => this._tone(120, 0.1, 'triangle', 0.15), 100);
-    setTimeout(() => this._noise(0.2, 0.1), 150);
-  },
-
-  playReelTick() {
-    // Tick uses Web Audio synthesis only (too rapid for file playback)
-    this._tone(800 + Math.random() * 400, 0.03, 'square', 0.08);
-  },
-
-  async playReelStop() {
-    if (await this._playSfx('reel_stop')) return;
-    this._tone(880, 0.12, 'sine', 0.25);
-    setTimeout(() => this._tone(1100, 0.08, 'sine', 0.15), 80);
-  },
-
-  async playFanfare() {
-    if (await this._playSfx('fanfare')) return;
-    const notes = [523, 659, 784, 1047];
-    notes.forEach((f, i) => {
-      setTimeout(() => this._tone(f, 0.4, 'sine', 0.2), i * 120);
-    });
-    setTimeout(() => this._noise(0.3, 0.08), 500);
-  },
-
-  async playClick() {
-    if (await this._playSfx('button_click')) return;
-    this._tone(1000, 0.04, 'sine', 0.12);
-  },
-
-  async playCopySuccess() {
-    if (await this._playSfx('copy_success')) return;
-    this._tone(880, 0.15, 'sine', 0.2);
-    setTimeout(() => this._tone(1320, 0.2, 'sine', 0.18), 100);
+    } catch {}
   }
 };
 
@@ -872,202 +651,146 @@ function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(name + '-screen').classList.add('active');
   State.currentScreen = name;
-  // Focus first interactive element
   requestAnimationFrame(() => {
-    const target = document.querySelector('#' + name + '-screen button, #' + name + '-screen textarea, #' + name + '-screen input');
+    const target = document.querySelector('#' + name + '-screen button, #' + name + '-screen textarea');
     if (target) target.focus();
   });
 }
 
-// ===== REEL SETUP =====
-const REELS_DATA = [REEL_1_SUBJECTS, REEL_2_ACTIONS, REEL_3_TARGETS];
-const REEL_ITEM_HEIGHT = 60; // matches CSS
-let reelIntervals = [null, null, null];
-let reelPositions = [0, 0, 0];
+// ===== COOKIE GRID =====
+const COOKIE_COUNT = 7;
 
-function buildReelStrips() {
-  for (let r = 0; r < 3; r++) {
-    const strip = document.getElementById('strip-' + r);
-    strip.innerHTML = '';
-    // Repeat items 5x for seamless spinning illusion
-    for (let rep = 0; rep < 5; rep++) {
-      REELS_DATA[r].forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'reel-item';
-        div.textContent = item;
-        div.setAttribute('aria-hidden', 'true');
-        strip.appendChild(div);
-      });
-    }
-  }
-  // Adjust height for mobile
-  if (window.innerWidth <= 600) {
-    document.querySelectorAll('.reel-window').forEach(w => {
-      const h = parseInt(getComputedStyle(w).height);
-      if (h !== REEL_ITEM_HEIGHT) {
-        // Sync reel-item heights
-      }
-    });
+function buildCookieGrid() {
+  const grid = document.getElementById('cookie-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < COOKIE_COUNT; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'cookie-btn';
+    btn.setAttribute('aria-label', (i + 1) + '번 쿠키');
+    btn.innerHTML = '<img src="cookie.png" alt="">';
+    btn.addEventListener('click', () => selectCookie(i, btn));
+    grid.appendChild(btn);
   }
 }
 
-function getItemHeight() {
-  return window.innerWidth <= 600 ? 52 : 60;
-}
-
-function generateResult() {
-  let i1, i2, i3, attempts = 0;
-  do {
-    i1 = Math.floor(Math.random() * REEL_1_SUBJECTS.length);
-    i2 = Math.floor(Math.random() * REEL_2_ACTIONS.length);
-    i3 = Math.floor(Math.random() * REEL_3_TARGETS.length);
-    attempts++;
-  } while (isBlocked(i1, i2, i3) && attempts < 50);
-  return [i1, i2, i3];
-}
-
-// ===== SPIN LOGIC =====
-function spin() {
-  if (State.isSpinning) return;
-  State.isSpinning = true;
+function selectCookie(index, btn) {
   AudioMgr.init();
-  AudioMgr.playLeverPull();
-  vibrate(100);
+  AudioMgr.play('button_click');
 
-  const spinBtn = document.getElementById('spin-btn');
-  spinBtn.disabled = true;
-  const preview = document.getElementById('result-preview');
-  preview.classList.remove('visible');
+  // Pick random fortune
+  State.fortuneIndex = Math.floor(Math.random() * FORTUNES.length);
 
-  announce('릴이 돌아갑니다...');
-
-  // Play reel spin sound after lever pull
-  setTimeout(() => AudioMgr._playSfx('reel_spin'), 300);
-
-  State.result = generateResult();
-  const ih = getItemHeight();
-
-  // Start all reels spinning
-  for (let r = 0; r < 3; r++) {
-    const win = document.getElementById('reel-' + r);
-    const strip = document.getElementById('strip-' + r);
-    win.classList.add('spinning');
-    win.classList.remove('stopped');
-    strip.style.transition = 'none';
-
-    let pos = 0;
-    const len = REELS_DATA[r].length;
-    reelIntervals[r] = setInterval(() => {
-      pos = (pos + 1) % (len * 5);
-      strip.style.transform = 'translateY(-' + (pos * ih) + 'px)';
-      AudioMgr.playReelTick();
-    }, 60 + r * 10);
-  }
-
-  // Stop reels sequentially
-  const stopDelays = [1200, 2000, 2800];
-  const reelLabels = ['첫 번째', '두 번째', '세 번째'];
-
-  stopDelays.forEach((delay, r) => {
-    setTimeout(() => {
-      clearInterval(reelIntervals[r]);
-      const win = document.getElementById('reel-' + r);
-      const strip = document.getElementById('strip-' + r);
-      const len = REELS_DATA[r].length;
-
-      // Calculate target position (land on 2nd repetition for visual buffer)
-      const targetPos = len * 2 + State.result[r];
-      strip.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1)';
-      strip.style.transform = 'translateY(-' + (targetPos * ih) + 'px)';
-
-      win.classList.remove('spinning');
-      win.classList.add('stopped');
-      AudioMgr.playReelStop();
-      vibrate(50);
-
-      const val = REELS_DATA[r][State.result[r]];
-      announce(reelLabels[r] + ': ' + val);
-
-      // After last reel stops
-      if (r === 2) {
-        setTimeout(() => {
-          const combo = REEL_1_SUBJECTS[State.result[0]] + ' ' +
-                        REEL_2_ACTIONS[State.result[1]] + ' ' +
-                        REEL_3_TARGETS[State.result[2]];
-          preview.textContent = combo;
-          preview.classList.add('visible');
-          AudioMgr.playFanfare();
-          vibrate([200, 100, 200]);
-          announce('결과: ' + combo);
-
-          setTimeout(() => {
-            showScreen('customize');
-            updateCustomizeScreen();
-            State.isSpinning = false;
-            spinBtn.disabled = false;
-          }, 1500);
-        }, 600);
-      }
-    }, delay);
+  // Fade out other cookies
+  const allBtns = document.querySelectorAll('.cookie-btn');
+  allBtns.forEach((b, i) => {
+    if (i !== index) b.classList.add('fading');
   });
+  btn.style.pointerEvents = 'none';
+
+  announce((index + 1) + '번 쿠키를 선택했습니다. 잠시 후 쿠키를 깰 수 있습니다.');
+
+  // After fade, show center phase
+  setTimeout(() => {
+    document.getElementById('cookie-select-phase').style.display = 'none';
+    document.getElementById('cookie-center-phase').classList.add('active');
+    AudioMgr.play('ambient_shimmer');
+    State.phase = 'center';
+    announce('쿠키를 깨려면 클릭하거나 Enter를 누르세요.');
+  }, 700);
 }
 
-// ===== CUSTOMIZE SCREEN =====
-function updateCustomizeScreen() {
-  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
-                REEL_2_ACTIONS[State.result[1]] + '] + [' +
-                REEL_3_TARGETS[State.result[2]] + ']';
-  document.getElementById('combo-display').textContent = combo;
-  announce('뽑기 결과: ' + combo + '. 나의 한마디를 작성해 주세요.');
+function crackCookie() {
+  if (State.phase !== 'center') return;
+  State.phase = 'cracked';
+
+  AudioMgr.play('cookie_crack');
+  vibrate([100, 50, 100]);
+
+  // Hide center, show cracked
+  document.getElementById('cookie-center-phase').classList.remove('active');
+  document.getElementById('cookie-cracked-phase').classList.add('active');
+
+  // Split animation
+  setTimeout(() => {
+    document.getElementById('crack-halves').classList.add('split');
+  }, 50);
+
+  // Unfold paper
+  setTimeout(() => {
+    AudioMgr.play('paper_unfold');
+    const paper = document.getElementById('fortune-paper');
+    paper.classList.add('unfolded');
+  }, 800);
+
+  // Typewriter text
+  setTimeout(() => {
+    const text = FORTUNES[State.fortuneIndex];
+    typeWriter(document.getElementById('fortune-text'), text, 40, () => {
+      AudioMgr.play('reveal_chime');
+      document.getElementById('paper-actions').style.display = 'flex';
+      announce('메시지: ' + text);
+    });
+  }, 1400);
 }
 
-function goToResult() {
-  const msg = document.getElementById('my-message').value.trim();
-  if (!msg) {
-    document.getElementById('msg-validation').textContent = '나의 한마디를 입력해 주세요.';
-    document.getElementById('my-message').focus();
+function typeWriter(el, text, speed, callback) {
+  el.textContent = '';
+  let i = 0;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    el.textContent = text;
+    if (callback) callback();
     return;
   }
-  document.getElementById('msg-validation').textContent = '';
-  State.myMessage = msg;
-  State.userName = document.getElementById('name-input').value.trim();
-  State.userOffice = document.getElementById('office-select').value;
-
-  AudioMgr.playClick();
-  showScreen('result');
-  updateResultScreen();
+  function type() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    } else {
+      if (callback) callback();
+    }
+  }
+  type();
 }
 
-function updateResultScreen() {
-  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
-                REEL_2_ACTIONS[State.result[1]] + '] + [' +
-                REEL_3_TARGETS[State.result[2]] + ']';
-  document.getElementById('final-combo').textContent = combo;
-  document.getElementById('final-message').textContent = '💬 "' + State.myMessage + '"';
+function resetCookieScreen() {
+  // Reset all phases
+  document.getElementById('cookie-select-phase').style.display = '';
+  document.getElementById('cookie-center-phase').classList.remove('active');
+  document.getElementById('cookie-cracked-phase').classList.remove('active');
+  document.getElementById('crack-halves').classList.remove('split');
+  document.getElementById('fortune-paper').classList.remove('unfolded');
+  document.getElementById('fortune-text').textContent = '';
+  document.getElementById('paper-actions').style.display = 'none';
+  State.phase = 'select';
 
-  let attr = '— ';
-  attr += State.userName || '익명';
-  if (State.userOffice) attr += ' (' + State.userOffice + ')';
-  document.getElementById('final-attribution').textContent = attr;
+  // Rebuild grid (resets fading)
+  buildCookieGrid();
+}
 
-  announce('결과 카드가 생성되었습니다. 복사하기 버튼을 눌러 블로그에 붙여넣기 하세요.');
+// ===== COMPLETE SCREEN =====
+function goToComplete() {
+  AudioMgr.play('button_click');
+  document.getElementById('result-fortune').textContent = FORTUNES[State.fortuneIndex];
+  showScreen('complete');
+  announce('메시지가 선택되었습니다. 한마디를 추가하거나 바로 완성할 수 있습니다.');
 }
 
 function formatResultText() {
-  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
-                REEL_2_ACTIONS[State.result[1]] + '] + [' +
-                REEL_3_TARGETS[State.result[2]] + ']';
-  let text = '🎰 나의 교육감 공약 뽑기 결과\n';
-  text += combo + '\n';
-  text += '💬 나의 한마디: "' + State.myMessage + '"\n';
-  text += '— ' + (State.userName || '익명');
-  if (State.userOffice) text += ' (' + State.userOffice + ')';
-  text += '\n#새교육감에게바란다 #장애인주간 #장교조';
+  let text = '[새 교육감에게 바란다]\n\n';
+  text += '"' + FORTUNES[State.fortuneIndex] + '"';
+  const extra = document.getElementById('extra-message').value.trim();
+  if (extra) {
+    text += '\n\n나의 한마디: ' + extra;
+  }
+  text += '\n\n#새교육감에게바란다 #장애인주간 #장교조';
   return text;
 }
 
-async function copyResult() {
+async function submitResult() {
   const text = formatResultText();
+  // Copy to clipboard
   try {
     await navigator.clipboard.writeText(text);
   } catch {
@@ -1080,88 +803,92 @@ async function copyResult() {
     document.execCommand('copy');
     document.body.removeChild(ta);
   }
-  AudioMgr.playCopySuccess();
-  showToast('복사 완료! 블로그 댓글에 붙여넣기 하세요 📋');
-  announce('결과가 클립보드에 복사되었습니다. 블로그에서 댓글로 붙여넣기 하세요.');
+  AudioMgr.play('copy_success');
+  showToast('클립보드에 복사되었습니다');
+  announce('결과가 클립보드에 복사되었습니다.');
+
+  // Update form link with pre-fill
+  const formUrl = buildFormUrl();
+  document.getElementById('form-link').href = formUrl;
+}
+
+function buildFormUrl() {
+  // Google Form pre-fill URL
+  // entry IDs will be set after Form creation
+  const fortune = FORTUNES[State.fortuneIndex];
+  const extra = document.getElementById('extra-message').value.trim();
+  // Placeholder — will be replaced with actual entry IDs
+  return GOOGLE_FORM_URL;
 }
 
 // ===== INIT =====
 function init() {
-  buildReelStrips();
+  buildCookieGrid();
 
-  // Populate office dropdown
-  const sel = document.getElementById('office-select');
-  EDUCATION_OFFICES.forEach(o => {
-    const opt = document.createElement('option');
-    opt.value = o;
-    opt.textContent = o;
-    sel.appendChild(opt);
-  });
-
-  // Event listeners
+  // Start button
   document.getElementById('start-btn').addEventListener('click', () => {
     AudioMgr.init();
-    AudioMgr.playClick();
-    showScreen('slot');
-    announce('슬롯머신 화면입니다. 레버 당기기 버튼을 눌러 뽑기를 시작하세요.');
+    AudioMgr.play('button_click');
+    showScreen('cookie');
+    announce('포춘 쿠키 7개가 있습니다. 하나를 골라 주세요.');
   });
 
-  document.getElementById('spin-btn').addEventListener('click', spin);
+  // Crack cookie
+  document.getElementById('cookie-hero').addEventListener('click', crackCookie);
 
-  document.getElementById('respin-btn').addEventListener('click', () => {
-    AudioMgr.playClick();
-    showScreen('slot');
-    // Reset reel visuals
-    for (let r = 0; r < 3; r++) {
-      const win = document.getElementById('reel-' + r);
-      win.classList.remove('stopped');
-    }
-  });
+  // Accept fortune
+  document.getElementById('accept-btn').addEventListener('click', goToComplete);
 
-  document.getElementById('submit-btn').addEventListener('click', goToResult);
-
-  document.getElementById('copy-btn').addEventListener('click', copyResult);
-
+  // Retry (from cookie screen)
   document.getElementById('retry-btn').addEventListener('click', () => {
-    AudioMgr.playClick();
-    document.getElementById('my-message').value = '';
-    document.getElementById('name-input').value = '';
-    document.getElementById('msg-validation').textContent = '';
-    showScreen('slot');
-    for (let r = 0; r < 3; r++) {
-      document.getElementById('reel-' + r).classList.remove('stopped');
-    }
+    AudioMgr.play('button_click');
+    resetCookieScreen();
+    announce('다시 뽑기. 쿠키 7개 중 하나를 골라 주세요.');
   });
 
-  // Mute button
+  // Submit
+  document.getElementById('submit-btn').addEventListener('click', submitResult);
+
+  // Restart (from complete screen)
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    AudioMgr.play('button_click');
+    document.getElementById('extra-message').value = '';
+    resetCookieScreen();
+    showScreen('cookie');
+    announce('처음부터 다시 시작합니다. 쿠키를 골라 주세요.');
+  });
+
+  // Mute
   document.getElementById('mute-btn').addEventListener('click', () => {
     const btn = document.getElementById('mute-btn');
     if (State.isMuted) {
       AudioMgr.setMuted(false);
-      btn.textContent = '🔊';
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/></svg>';
       btn.setAttribute('aria-label', '효과음 끄기');
     } else {
       AudioMgr.setMuted(true);
-      btn.textContent = '🔇';
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
       btn.setAttribute('aria-label', '효과음 켜기');
     }
   });
 
-  // Global keyboard
+  // Keyboard
   document.addEventListener('keydown', (e) => {
     if (e.target.closest('textarea, input, select')) return;
 
     if (e.key === 'Escape') {
-      if (State.currentScreen === 'slot') { showScreen('start'); }
-      else if (State.currentScreen === 'customize') { showScreen('slot'); }
-      else if (State.currentScreen === 'result') { showScreen('customize'); }
-    }
-
-    // Enter/Space on non-button targets to trigger primary action
-    if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button, a, [role="button"]')) {
-      e.preventDefault();
-      if (State.currentScreen === 'start') document.getElementById('start-btn').click();
-      else if (State.currentScreen === 'slot' && !State.isSpinning) document.getElementById('spin-btn').click();
+      if (State.currentScreen === 'cookie') {
+        if (State.phase === 'cracked' || State.phase === 'center') {
+          resetCookieScreen();
+          announce('쿠키 선택으로 돌아갑니다.');
+        } else {
+          showScreen('start');
+        }
+      } else if (State.currentScreen === 'complete') {
+        resetCookieScreen();
+        showScreen('cookie');
+        announce('쿠키 선택으로 돌아갑니다.');
+      }
     }
   });
 }
