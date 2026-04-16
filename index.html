@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>교육감 공약 뽑기 기계 — 새 교육감에게 바란다</title>
+<meta name="description" content="장애인주간 기념 이벤트 — 슬롯머신을 돌려 교육감에게 바라는 공약을 뽑아보세요!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1a0a2e;
+  --bg2: #2d1b4e;
+  --card: #261447;
+  --accent: #ffd700;
+  --accent2: #ff6b35;
+  --correct: #00e676;
+  --text: #f0f0f0;
+  --text-dim: #b8a8d0;
+  --machine-border: linear-gradient(135deg, #c9a84c, #ffd700, #c9a84c, #8b6914);
+  --machine-body: linear-gradient(180deg, #3d2066 0%, #261447 50%, #1a0a2e 100%);
+}
+
+html, body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+/* Background */
+#bg-image {
+  position: fixed;
+  inset: 0;
+  background: url('bg.png') center/cover no-repeat;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Screen switching */
+.screen { display: none; flex-direction: column; align-items: center; width: 100%; }
+.screen.active { display: flex; }
+
+/* Mute button */
+#mute-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: rgba(26, 10, 46, 0.85);
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  transition: background 0.2s;
+}
+#mute-btn:hover, #mute-btn:focus {
+  background: rgba(255, 215, 0, 0.2);
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* SR announce */
+#sr-announce {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* ===== SCREEN 1: START ===== */
+#start-screen { text-align: center; animation: fadeIn 0.6s ease; gap: 1em; }
+
+.logo-area {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5em;
+}
+
+.title {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 2.6rem;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 3px 0 #8b6914;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.5rem;
+  color: var(--accent2);
+  margin-top: 0.2em;
+}
+
+.event-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent2), #ff8c42);
+  color: #fff;
+  padding: 0.3em 1em;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 0.3em;
+}
+
+.desc {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0.5em auto;
+}
+
+.start-btn {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.8rem;
+  padding: 0.5em 2em;
+  background: linear-gradient(135deg, var(--accent), #ffed4a);
+  color: #1a0a2e;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  touch-action: manipulation;
+  min-height: 56px;
+}
+.start-btn:hover, .start-btn:focus {
+  transform: scale(1.06);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+  outline: 3px solid var(--accent2);
+  outline-offset: 4px;
+}
+
+.gift-note {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 0.5em;
+}
+
+/* ===== SCREEN 2: SLOT MACHINE ===== */
+#slot-screen { animation: fadeIn 0.4s ease; gap: 1.2em; }
+
+.machine-frame {
+  background: var(--machine-body);
+  border: 4px solid;
+  border-image: var(--machine-border) 1;
+  border-radius: 16px;
+  padding: 1.5em 1em;
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 2px 20px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 460px;
+}
+
+.machine-title {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.reels-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.2em;
+}
+
+.reel-wrapper {
+  flex: 1;
+  max-width: 150px;
+}
+
+.reel-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.reel-window {
+  height: 60px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.4);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  position: relative;
+}
+
+.reel-window::before,
+.reel-window::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+.reel-window::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(26,10,46,0.8), transparent);
+}
+.reel-window::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(26,10,46,0.8), transparent);
+}
+
+.reel-strip {
+  transition: transform 0.1s linear;
+}
+
+.reel-item {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0 6px;
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.reel-window.spinning .reel-strip {
+  filter: blur(1.5px);
+}
+
+.reel-window.stopped {
+  border-color: var(--correct);
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
+}
+
+.spin-btn {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.5rem;
+  padding: 0.5em 1.5em;
+  background: linear-gradient(135deg, var(--accent2), #ff8c42);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  touch-action: manipulation;
+  min-height: 56px;
+  width: 100%;
+  max-width: 300px;
+}
+.spin-btn:hover, .spin-btn:focus {
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(255, 107, 53, 0.6);
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+.spin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.result-preview {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-height: 1.5em;
+  margin-top: 0.5em;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.result-preview.visible { opacity: 1; }
+
+/* ===== SCREEN 3: CUSTOMIZE ===== */
+#customize-screen { animation: fadeIn 0.4s ease; gap: 1em; }
+
+.result-card-mini {
+  background: linear-gradient(135deg, #3d2066, #261447);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 1em;
+  text-align: center;
+  width: 100%;
+  max-width: 460px;
+}
+
+.result-card-mini .combo {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+  line-height: 1.4;
+}
+
+.respin-btn {
+  font-size: 0.9rem;
+  padding: 0.4em 1.2em;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--text-dim);
+  border-radius: 20px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+  margin-top: 0.5em;
+  transition: border-color 0.2s, color 0.2s;
+}
+.respin-btn:hover, .respin-btn:focus {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.form-area {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+}
+
+.form-area label {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.form-area textarea,
+.form-area input,
+.form-area select {
+  width: 100%;
+  padding: 0.7em;
+  border: 2px solid #4a3570;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.3);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1rem;
+  min-height: 48px;
+  transition: border-color 0.2s;
+}
+.form-area textarea:focus,
+.form-area input:focus,
+.form-area select:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.form-area textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-area select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b8a8d0' fill='none' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.form-area select option {
+  background: #261447;
+  color: var(--text);
+}
+
+.submit-btn {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.3rem;
+  padding: 0.5em 1.5em;
+  background: linear-gradient(135deg, var(--accent), #ffed4a);
+  color: #1a0a2e;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+  transition: transform 0.2s;
+  touch-action: manipulation;
+  min-height: 52px;
+  margin-top: 0.5em;
+}
+.submit-btn:hover, .submit-btn:focus {
+  transform: scale(1.04);
+  outline: 3px solid var(--accent2);
+  outline-offset: 4px;
+}
+
+.validation-msg {
+  color: var(--accent2);
+  font-size: 0.85rem;
+  min-height: 1.2em;
+}
+
+/* ===== SCREEN 4: RESULT ===== */
+#result-screen { animation: fadeIn 0.4s ease; gap: 1em; }
+
+.result-card {
+  background: linear-gradient(135deg, #3d2066 0%, #1a0a2e 50%, #261447 100%);
+  border: 3px solid var(--accent);
+  border-radius: 16px;
+  padding: 1.5em;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+.result-card .header-emoji {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.3em;
+}
+
+.result-card .result-title {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 0.8em;
+}
+
+.result-card .combo-line {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.4rem;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.4;
+  margin-bottom: 1em;
+  word-break: keep-all;
+}
+
+.result-card .message-line {
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0.8em;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 0.8em;
+  word-break: keep-all;
+}
+
+.result-card .attribution {
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.result-card .hashtags {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  margin-top: 0.8em;
+}
+
+.action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  width: 100%;
+  max-width: 460px;
+}
+
+.copy-btn {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.3rem;
+  padding: 0.5em 1.5em;
+  background: linear-gradient(135deg, var(--accent), #ffed4a);
+  color: #1a0a2e;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+  transition: transform 0.2s;
+  touch-action: manipulation;
+  min-height: 52px;
+}
+.copy-btn:hover, .copy-btn:focus {
+  transform: scale(1.04);
+  outline: 3px solid var(--accent2);
+  outline-offset: 4px;
+}
+
+.blog-btn {
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 1.1rem;
+  padding: 0.5em 1.5em;
+  background: linear-gradient(135deg, var(--accent2), #ff8c42);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  touch-action: manipulation;
+  min-height: 48px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blog-btn:hover, .blog-btn:focus {
+  transform: scale(1.04);
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.retry-btn {
+  font-size: 0.9rem;
+  padding: 0.4em 1.2em;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--text-dim);
+  border-radius: 20px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.retry-btn:hover, .retry-btn:focus {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--correct);
+  color: #1a0a2e;
+  padding: 0.7em 1.5em;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  z-index: 200;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reel-window.spinning .reel-strip { filter: none; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  body { padding: 0.5em; }
+  .title { font-size: 2rem; }
+  .subtitle { font-size: 1.2rem; }
+  .start-btn { font-size: 1.5rem; }
+  .machine-frame { padding: 1em 0.7em; }
+  .reel-item { font-size: 0.8rem; }
+  .reel-window { height: 52px; }
+  .reel-item { height: 52px; }
+  .result-card .combo-line { font-size: 1.2rem; }
+  .reels-container { gap: 5px; }
+}
+</style>
+</head>
+<body>
+
+<div id="bg-image"></div>
+
+<button id="mute-btn" aria-label="효과음 끄기">🔊</button>
+
+<div id="sr-announce" role="status" aria-live="assertive" aria-atomic="true"></div>
+
+<div class="container">
+
+  <!-- SCREEN 1: START -->
+  <div id="start-screen" class="screen active">
+    <div class="logo-area">함께하는장애인교원노동조합</div>
+    <div class="title">🎰 교육감 공약<br>뽑기 기계</div>
+    <div class="subtitle">새 교육감에게 바란다</div>
+    <div class="event-badge">🎉 장애인주간 4.20 ~ 4.24</div>
+    <p class="desc">
+      슬롯머신을 돌려 교육감에게 바라는 공약 조합을 뽑아보세요!<br>
+      나만의 한마디를 추가하여 블로그 댓글로 남기면,<br>
+      교육감 후보 면담 자료에 반영됩니다.
+    </p>
+    <button class="start-btn" id="start-btn">뽑기 시작!</button>
+    <p class="gift-note">🎁 참여자 전원 기프티콘(5천 원) 증정</p>
+  </div>
+
+  <!-- SCREEN 2: SLOT MACHINE -->
+  <div id="slot-screen" class="screen">
+    <div class="machine-frame">
+      <div class="machine-title">🎰 교육감 공약 뽑기 기계</div>
+      <div class="reels-container">
+        <div class="reel-wrapper">
+          <div class="reel-label">누가</div>
+          <div class="reel-window" id="reel-0">
+            <div class="reel-strip" id="strip-0"></div>
+          </div>
+        </div>
+        <div class="reel-wrapper">
+          <div class="reel-label">어떻게</div>
+          <div class="reel-window" id="reel-1">
+            <div class="reel-strip" id="strip-1"></div>
+          </div>
+        </div>
+        <div class="reel-wrapper">
+          <div class="reel-label">무엇을</div>
+          <div class="reel-window" id="reel-2">
+            <div class="reel-strip" id="strip-2"></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <button class="spin-btn" id="spin-btn">🎰 레버 당기기!</button>
+      </div>
+      <div class="result-preview" id="result-preview"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: CUSTOMIZE -->
+  <div id="customize-screen" class="screen">
+    <div class="result-card-mini">
+      <div class="combo" id="combo-display"></div>
+      <button class="respin-btn" id="respin-btn">🔄 다시 뽑기</button>
+    </div>
+    <div class="form-area">
+      <div>
+        <label for="my-message">💬 나의 한마디 <span style="color:var(--accent2)">*</span></label>
+        <textarea id="my-message" placeholder="예: 장애인 교원이 당연하게 일할 수 있는 학교를 만들어 주세요" aria-required="true" maxlength="200"></textarea>
+        <div class="validation-msg" id="msg-validation"></div>
+      </div>
+      <div>
+        <label for="name-input">✏️ 이름 (선택)</label>
+        <input type="text" id="name-input" placeholder="예: 김○○" maxlength="20">
+      </div>
+      <div>
+        <label for="office-select">🏫 소속 교육청</label>
+        <select id="office-select">
+          <option value="">소속 교육청 선택</option>
+        </select>
+      </div>
+      <button class="submit-btn" id="submit-btn">결과 카드 만들기 ✨</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: RESULT -->
+  <div id="result-screen" class="screen">
+    <div class="result-card" id="result-card">
+      <div class="header-emoji">🎰</div>
+      <div class="result-title">나의 교육감 공약 뽑기 결과</div>
+      <div class="combo-line" id="final-combo"></div>
+      <div class="message-line" id="final-message"></div>
+      <div class="attribution" id="final-attribution"></div>
+      <div class="hashtags">#새교육감에게바란다 #장애인주간 #장교조</div>
+    </div>
+    <div class="action-btns">
+      <button class="copy-btn" id="copy-btn">📋 복사하기</button>
+      <a class="blog-btn" id="blog-btn" href="https://khudt.posthaven.com" target="_blank" rel="noopener noreferrer">📝 장교조 블로그로 이동 →</a>
+      <button class="retry-btn" id="retry-btn">🔄 다시 하기</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="pledge_data.js"></script>
+<script>
+// ===== STATE =====
+const State = {
+  currentScreen: 'start',
+  result: [0, 0, 0],
+  myMessage: '',
+  userName: '',
+  userOffice: '',
+  isSpinning: false,
+  isMuted: false
+};
+
+// ===== AUDIO MANAGER (Web Audio API) =====
+const AudioMgr = {
+  ctx: null,
+  masterGain: null,
+  initialized: false,
+
+  init() {
+    if (this.initialized) return;
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.connect(this.ctx.destination);
+      this.masterGain.gain.value = 0.25;
+      this.initialized = true;
+    } catch (e) { /* no audio support */ }
+  },
+
+  setMuted(muted) {
+    State.isMuted = muted;
+    if (this.masterGain) this.masterGain.gain.value = muted ? 0 : 0.25;
+  },
+
+  _tone(freq, dur, type, vol) {
+    if (!this.initialized || State.isMuted) return;
+    const osc = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    osc.connect(g); g.connect(this.masterGain);
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(vol || 0.3, this.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + dur);
+    osc.start(this.ctx.currentTime);
+    osc.stop(this.ctx.currentTime + dur);
+  },
+
+  _noise(dur, vol) {
+    if (!this.initialized || State.isMuted) return;
+    const sr = this.ctx.sampleRate;
+    const buf = this.ctx.createBuffer(1, sr * dur, sr);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * dur * 0.5));
+    const src = this.ctx.createBufferSource();
+    const g = this.ctx.createGain();
+    const f = this.ctx.createBiquadFilter();
+    src.buffer = buf;
+    src.connect(f); f.connect(g); g.connect(this.masterGain);
+    f.type = 'bandpass'; f.frequency.value = 2000; f.Q.value = 0.5;
+    g.gain.setValueAtTime(vol || 0.15, this.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + dur);
+    src.start(); src.stop(this.ctx.currentTime + dur);
+  },
+
+  playLeverPull() {
+    this._tone(200, 0.15, 'square', 0.2);
+    setTimeout(() => this._tone(120, 0.1, 'triangle', 0.15), 100);
+    setTimeout(() => this._noise(0.2, 0.1), 150);
+  },
+
+  playReelTick() {
+    this._tone(800 + Math.random() * 400, 0.03, 'square', 0.08);
+  },
+
+  playReelStop() {
+    this._tone(880, 0.12, 'sine', 0.25);
+    setTimeout(() => this._tone(1100, 0.08, 'sine', 0.15), 80);
+  },
+
+  playFanfare() {
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((f, i) => {
+      setTimeout(() => this._tone(f, 0.4, 'sine', 0.2), i * 120);
+    });
+    setTimeout(() => this._noise(0.3, 0.08), 500);
+  },
+
+  playClick() {
+    this._tone(1000, 0.04, 'sine', 0.12);
+  },
+
+  playCopySuccess() {
+    this._tone(880, 0.15, 'sine', 0.2);
+    setTimeout(() => this._tone(1320, 0.2, 'sine', 0.18), 100);
+  }
+};
+
+// ===== HELPERS =====
+function announce(text) {
+  const el = document.getElementById('sr-announce');
+  el.textContent = '';
+  requestAnimationFrame(() => { el.textContent = text; });
+}
+
+function vibrate(pattern) {
+  if (navigator.vibrate) navigator.vibrate(pattern);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(name + '-screen').classList.add('active');
+  State.currentScreen = name;
+  // Focus first interactive element
+  requestAnimationFrame(() => {
+    const target = document.querySelector('#' + name + '-screen button, #' + name + '-screen textarea, #' + name + '-screen input');
+    if (target) target.focus();
+  });
+}
+
+// ===== REEL SETUP =====
+const REELS_DATA = [REEL_1_SUBJECTS, REEL_2_ACTIONS, REEL_3_TARGETS];
+const REEL_ITEM_HEIGHT = 60; // matches CSS
+let reelIntervals = [null, null, null];
+let reelPositions = [0, 0, 0];
+
+function buildReelStrips() {
+  for (let r = 0; r < 3; r++) {
+    const strip = document.getElementById('strip-' + r);
+    strip.innerHTML = '';
+    // Repeat items 5x for seamless spinning illusion
+    for (let rep = 0; rep < 5; rep++) {
+      REELS_DATA[r].forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'reel-item';
+        div.textContent = item;
+        div.setAttribute('aria-hidden', 'true');
+        strip.appendChild(div);
+      });
+    }
+  }
+  // Adjust height for mobile
+  if (window.innerWidth <= 600) {
+    document.querySelectorAll('.reel-window').forEach(w => {
+      const h = parseInt(getComputedStyle(w).height);
+      if (h !== REEL_ITEM_HEIGHT) {
+        // Sync reel-item heights
+      }
+    });
+  }
+}
+
+function getItemHeight() {
+  return window.innerWidth <= 600 ? 52 : 60;
+}
+
+function generateResult() {
+  let i1, i2, i3, attempts = 0;
+  do {
+    i1 = Math.floor(Math.random() * REEL_1_SUBJECTS.length);
+    i2 = Math.floor(Math.random() * REEL_2_ACTIONS.length);
+    i3 = Math.floor(Math.random() * REEL_3_TARGETS.length);
+    attempts++;
+  } while (isBlocked(i1, i2, i3) && attempts < 50);
+  return [i1, i2, i3];
+}
+
+// ===== SPIN LOGIC =====
+function spin() {
+  if (State.isSpinning) return;
+  State.isSpinning = true;
+  AudioMgr.init();
+  AudioMgr.playLeverPull();
+  vibrate(100);
+
+  const spinBtn = document.getElementById('spin-btn');
+  spinBtn.disabled = true;
+  const preview = document.getElementById('result-preview');
+  preview.classList.remove('visible');
+
+  announce('릴이 돌아갑니다...');
+
+  State.result = generateResult();
+  const ih = getItemHeight();
+
+  // Start all reels spinning
+  for (let r = 0; r < 3; r++) {
+    const win = document.getElementById('reel-' + r);
+    const strip = document.getElementById('strip-' + r);
+    win.classList.add('spinning');
+    win.classList.remove('stopped');
+    strip.style.transition = 'none';
+
+    let pos = 0;
+    const len = REELS_DATA[r].length;
+    reelIntervals[r] = setInterval(() => {
+      pos = (pos + 1) % (len * 5);
+      strip.style.transform = 'translateY(-' + (pos * ih) + 'px)';
+      AudioMgr.playReelTick();
+    }, 60 + r * 10);
+  }
+
+  // Stop reels sequentially
+  const stopDelays = [1200, 2000, 2800];
+  const reelLabels = ['첫 번째', '두 번째', '세 번째'];
+
+  stopDelays.forEach((delay, r) => {
+    setTimeout(() => {
+      clearInterval(reelIntervals[r]);
+      const win = document.getElementById('reel-' + r);
+      const strip = document.getElementById('strip-' + r);
+      const len = REELS_DATA[r].length;
+
+      // Calculate target position (land on 2nd repetition for visual buffer)
+      const targetPos = len * 2 + State.result[r];
+      strip.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1)';
+      strip.style.transform = 'translateY(-' + (targetPos * ih) + 'px)';
+
+      win.classList.remove('spinning');
+      win.classList.add('stopped');
+      AudioMgr.playReelStop();
+      vibrate(50);
+
+      const val = REELS_DATA[r][State.result[r]];
+      announce(reelLabels[r] + ': ' + val);
+
+      // After last reel stops
+      if (r === 2) {
+        setTimeout(() => {
+          const combo = REEL_1_SUBJECTS[State.result[0]] + ' ' +
+                        REEL_2_ACTIONS[State.result[1]] + ' ' +
+                        REEL_3_TARGETS[State.result[2]];
+          preview.textContent = combo;
+          preview.classList.add('visible');
+          AudioMgr.playFanfare();
+          vibrate([200, 100, 200]);
+          announce('결과: ' + combo);
+
+          setTimeout(() => {
+            showScreen('customize');
+            updateCustomizeScreen();
+            State.isSpinning = false;
+            spinBtn.disabled = false;
+          }, 1500);
+        }, 600);
+      }
+    }, delay);
+  });
+}
+
+// ===== CUSTOMIZE SCREEN =====
+function updateCustomizeScreen() {
+  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
+                REEL_2_ACTIONS[State.result[1]] + '] + [' +
+                REEL_3_TARGETS[State.result[2]] + ']';
+  document.getElementById('combo-display').textContent = combo;
+  announce('뽑기 결과: ' + combo + '. 나의 한마디를 작성해 주세요.');
+}
+
+function goToResult() {
+  const msg = document.getElementById('my-message').value.trim();
+  if (!msg) {
+    document.getElementById('msg-validation').textContent = '나의 한마디를 입력해 주세요.';
+    document.getElementById('my-message').focus();
+    return;
+  }
+  document.getElementById('msg-validation').textContent = '';
+  State.myMessage = msg;
+  State.userName = document.getElementById('name-input').value.trim();
+  State.userOffice = document.getElementById('office-select').value;
+
+  AudioMgr.playClick();
+  showScreen('result');
+  updateResultScreen();
+}
+
+function updateResultScreen() {
+  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
+                REEL_2_ACTIONS[State.result[1]] + '] + [' +
+                REEL_3_TARGETS[State.result[2]] + ']';
+  document.getElementById('final-combo').textContent = combo;
+  document.getElementById('final-message').textContent = '💬 "' + State.myMessage + '"';
+
+  let attr = '— ';
+  attr += State.userName || '익명';
+  if (State.userOffice) attr += ' (' + State.userOffice + ')';
+  document.getElementById('final-attribution').textContent = attr;
+
+  announce('결과 카드가 생성되었습니다. 복사하기 버튼을 눌러 블로그에 붙여넣기 하세요.');
+}
+
+function formatResultText() {
+  const combo = '[' + REEL_1_SUBJECTS[State.result[0]] + '] + [' +
+                REEL_2_ACTIONS[State.result[1]] + '] + [' +
+                REEL_3_TARGETS[State.result[2]] + ']';
+  let text = '🎰 나의 교육감 공약 뽑기 결과\n';
+  text += combo + '\n';
+  text += '💬 나의 한마디: "' + State.myMessage + '"\n';
+  text += '— ' + (State.userName || '익명');
+  if (State.userOffice) text += ' (' + State.userOffice + ')';
+  text += '\n#새교육감에게바란다 #장애인주간 #장교조';
+  return text;
+}
+
+async function copyResult() {
+  const text = formatResultText();
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  AudioMgr.playCopySuccess();
+  showToast('복사 완료! 블로그 댓글에 붙여넣기 하세요 📋');
+  announce('결과가 클립보드에 복사되었습니다. 블로그에서 댓글로 붙여넣기 하세요.');
+}
+
+// ===== INIT =====
+function init() {
+  buildReelStrips();
+
+  // Populate office dropdown
+  const sel = document.getElementById('office-select');
+  EDUCATION_OFFICES.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o;
+    opt.textContent = o;
+    sel.appendChild(opt);
+  });
+
+  // Event listeners
+  document.getElementById('start-btn').addEventListener('click', () => {
+    AudioMgr.init();
+    AudioMgr.playClick();
+    showScreen('slot');
+    announce('슬롯머신 화면입니다. 레버 당기기 버튼을 눌러 뽑기를 시작하세요.');
+  });
+
+  document.getElementById('spin-btn').addEventListener('click', spin);
+
+  document.getElementById('respin-btn').addEventListener('click', () => {
+    AudioMgr.playClick();
+    showScreen('slot');
+    // Reset reel visuals
+    for (let r = 0; r < 3; r++) {
+      const win = document.getElementById('reel-' + r);
+      win.classList.remove('stopped');
+    }
+  });
+
+  document.getElementById('submit-btn').addEventListener('click', goToResult);
+
+  document.getElementById('copy-btn').addEventListener('click', copyResult);
+
+  document.getElementById('retry-btn').addEventListener('click', () => {
+    AudioMgr.playClick();
+    document.getElementById('my-message').value = '';
+    document.getElementById('name-input').value = '';
+    document.getElementById('msg-validation').textContent = '';
+    showScreen('slot');
+    for (let r = 0; r < 3; r++) {
+      document.getElementById('reel-' + r).classList.remove('stopped');
+    }
+  });
+
+  // Mute button
+  document.getElementById('mute-btn').addEventListener('click', () => {
+    const btn = document.getElementById('mute-btn');
+    if (State.isMuted) {
+      AudioMgr.setMuted(false);
+      btn.textContent = '🔊';
+      btn.setAttribute('aria-label', '효과음 끄기');
+    } else {
+      AudioMgr.setMuted(true);
+      btn.textContent = '🔇';
+      btn.setAttribute('aria-label', '효과음 켜기');
+    }
+  });
+
+  // Global keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest('textarea, input, select')) return;
+
+    if (e.key === 'Escape') {
+      if (State.currentScreen === 'slot') { showScreen('start'); }
+      else if (State.currentScreen === 'customize') { showScreen('slot'); }
+      else if (State.currentScreen === 'result') { showScreen('customize'); }
+    }
+
+    // Enter/Space on non-button targets to trigger primary action
+    if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('button, a, [role="button"]')) {
+      e.preventDefault();
+      if (State.currentScreen === 'start') document.getElementById('start-btn').click();
+      else if (State.currentScreen === 'slot' && !State.isSpinning) document.getElementById('spin-btn').click();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
