@@ -555,13 +555,15 @@ body {
 
 <script src="fortune_data.js"></script>
 <script src="sfx_data.js"></script>
+<script src="voice_data.js"></script>
 <script>
 // ===== STATE =====
 const State = {
   currentScreen: 'start',
   fortuneIndex: -1,
   extraMessage: '',
-  phase: 'select' // select | center | cracked
+  phase: 'select', // select | center | cracked
+  voicePlayed: {} // track which voice clips have already played this session
 };
 
 // Google Form
@@ -598,6 +600,30 @@ const AudioMgr = {
       src.connect(this.masterGain);
       src.start();
     } catch {}
+  }
+};
+
+// ===== VOICE NARRATION =====
+// Plays once per session per key (A안: 스크린리더 충돌 최소화, 빠른 클릭 시 중복 방지)
+const VoiceMgr = {
+  audio: null,
+
+  play(key) {
+    if (typeof VOICE_DATA === 'undefined' || !VOICE_DATA[key]) return;
+    if (State.voicePlayed[key]) return;
+
+    if (this.audio) {
+      this.audio.pause();
+      this.audio.src = '';
+    }
+    const a = new Audio(VOICE_DATA[key]);
+    a.volume = 0.9;
+    this.audio = a;
+    a.play().then(() => {
+      State.voicePlayed[key] = true;
+    }).catch(() => {
+      // Autoplay blocked or interrupted — leave voicePlayed[key] unset so fallback can retry
+    });
   }
 };
 
@@ -667,6 +693,7 @@ function selectCookie(index, btn) {
     document.getElementById('cookie-center-phase').classList.add('active');
     AudioMgr.play('ambient_shimmer');
     State.phase = 'center';
+    VoiceMgr.play('crack');
     announce('쿠키를 깨려면 클릭하거나 Enter를 누르세요.');
   }, 700);
 }
@@ -699,6 +726,7 @@ function crackCookie() {
     const text = FORTUNES[State.fortuneIndex];
     typeWriter(document.getElementById('fortune-text'), text, 40, () => {
       AudioMgr.play('reveal_chime');
+      VoiceMgr.play('reveal');
       document.getElementById('paper-actions').style.display = 'flex';
       announce('메시지: ' + text);
     });
@@ -747,6 +775,7 @@ function goToComplete() {
   document.getElementById('result-fortune').textContent = FORTUNES[State.fortuneIndex];
   document.getElementById('form-link').href = buildFormUrl();
   showScreen('complete');
+  VoiceMgr.play('complete');
   announce('메시지가 선택되었습니다. 한마디를 추가하거나 바로 제출할 수 있습니다.');
 }
 
@@ -798,11 +827,22 @@ function buildFormUrl() {
 function init() {
   buildCookieGrid();
 
+  // Start screen voice — try autoplay, fall back to first user interaction
+  VoiceMgr.play('start');
+  const startFallback = () => {
+    document.removeEventListener('pointerdown', startFallback, true);
+    document.removeEventListener('keydown', startFallback, true);
+    VoiceMgr.play('start');
+  };
+  document.addEventListener('pointerdown', startFallback, true);
+  document.addEventListener('keydown', startFallback, true);
+
   // Start button
   document.getElementById('start-btn').addEventListener('click', () => {
     AudioMgr.init();
     AudioMgr.play('button_click');
     showScreen('cookie');
+    VoiceMgr.play('select');
     announce('포춘 쿠키 7개가 있습니다. 하나를 골라 주세요.');
   });
 
