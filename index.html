@@ -64,31 +64,6 @@ body {
 .screen { display: none; flex-direction: column; align-items: center; width: 100%; }
 .screen.active { display: flex; }
 
-#mute-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 100;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--accent-dim);
-  background: rgba(26, 20, 16, 0.85);
-  color: var(--text);
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: manipulation;
-  transition: background 0.2s;
-}
-#mute-btn:hover, #mute-btn:focus {
-  background: rgba(212, 167, 83, 0.2);
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
 #sr-announce {
   position: absolute;
   width: 1px; height: 1px;
@@ -153,11 +128,17 @@ body {
   touch-action: manipulation;
   min-height: 52px;
 }
-.primary-btn:hover, .primary-btn:focus {
+.primary-btn:hover:not(:disabled), .primary-btn:focus:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(212, 167, 83, 0.3);
   outline: 2px solid var(--text);
   outline-offset: 3px;
+}
+.primary-btn:disabled {
+  background: var(--accent-dim);
+  color: var(--text-dim);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .gift-note {
@@ -499,11 +480,6 @@ body {
 <body>
 
 <div id="bg-image"></div>
-<button id="mute-btn" aria-label="효과음 끄기">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/>
-  </svg>
-</button>
 <div id="sr-announce" role="status" aria-live="assertive" aria-atomic="true"></div>
 
 <div class="container">
@@ -512,15 +488,15 @@ body {
   <div id="start-screen" class="screen active">
     <div class="org-name">함께하는장애인교원노동조합</div>
     <h1 class="main-title">새 교육감에게<br>바란다</h1>
-    <p class="main-subtitle">포춘 쿠키를 깨고,<br>당신의 목소리를 담아보세요.</p>
+    <p class="main-subtitle">포춘 쿠키를 깨고,<br>선생님의 목소리를 담아보세요.</p>
     <div class="event-period">장애인주간 2026. 4. 20. ~ 4. 24.</div>
     <p class="desc">
       포춘 쿠키 안에는 장애인 교원의 바람이 담겨 있습니다.<br>
-      쿠키를 깨고 나온 메시지에 당신의 한마디를 더해<br>
+      쿠키를 깨고 나온 메시지에 선생님의 한마디를 더해<br>
       새 교육감에게 전해 주세요.
     </p>
     <button class="primary-btn" id="start-btn">쿠키 뽑으러 가기</button>
-    <p class="gift-note">참여자 전원 기프티콘(5천 원) 증정</p>
+    <p class="gift-note">참여자 전원 기프티콘 증정</p>
   </div>
 
   <!-- SCREEN 2: COOKIE -->
@@ -567,9 +543,9 @@ body {
       </div>
     </div>
     <div class="action-btns">
-      <button class="primary-btn" id="submit-btn">나의 한마디 완성하기</button>
+      <button class="primary-btn" id="submit-btn" disabled>나의 한마디 추가하기</button>
       <a class="blog-link" id="form-link" href="#" target="_blank" rel="noopener noreferrer">Google Form으로 제출하기</a>
-      <button class="secondary-btn" id="restart-btn">다시 하기</button>
+      <button class="secondary-btn" id="restart-btn">포춘 쿠키 다시 뽑기</button>
     </div>
   </div>
 
@@ -585,7 +561,6 @@ const State = {
   currentScreen: 'start',
   fortuneIndex: -1,
   extraMessage: '',
-  isMuted: false,
   phase: 'select' // select | center | cracked
 };
 
@@ -609,13 +584,8 @@ const AudioMgr = {
     } catch (e) {}
   },
 
-  setMuted(muted) {
-    State.isMuted = muted;
-    if (this.masterGain) this.masterGain.gain.value = muted ? 0 : 0.3;
-  },
-
   async play(key) {
-    if (!this.initialized || State.isMuted) return;
+    if (!this.initialized) return;
     if (typeof SFX_DATA === 'undefined' || !SFX_DATA[key]) return;
     try {
       if (!this.sfxCache[key]) {
@@ -775,8 +745,9 @@ function resetCookieScreen() {
 function goToComplete() {
   AudioMgr.play('button_click');
   document.getElementById('result-fortune').textContent = FORTUNES[State.fortuneIndex];
+  document.getElementById('form-link').href = buildFormUrl();
   showScreen('complete');
-  announce('메시지가 선택되었습니다. 한마디를 추가하거나 바로 완성할 수 있습니다.');
+  announce('메시지가 선택되었습니다. 한마디를 추가하거나 바로 제출할 수 있습니다.');
 }
 
 function formatResultText() {
@@ -855,22 +826,19 @@ function init() {
   document.getElementById('restart-btn').addEventListener('click', () => {
     AudioMgr.play('button_click');
     document.getElementById('extra-message').value = '';
+    document.getElementById('submit-btn').disabled = true;
     resetCookieScreen();
     showScreen('cookie');
     announce('처음부터 다시 시작합니다. 쿠키를 골라 주세요.');
   });
 
-  // Mute
-  document.getElementById('mute-btn').addEventListener('click', () => {
-    const btn = document.getElementById('mute-btn');
-    if (State.isMuted) {
-      AudioMgr.setMuted(false);
-      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.08"/></svg>';
-      btn.setAttribute('aria-label', '효과음 끄기');
-    } else {
-      AudioMgr.setMuted(true);
-      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
-      btn.setAttribute('aria-label', '효과음 켜기');
+  // Enable submit button only when textarea has content; keep form link pre-fill current
+  const extraMsg = document.getElementById('extra-message');
+  const submitBtn = document.getElementById('submit-btn');
+  extraMsg.addEventListener('input', () => {
+    submitBtn.disabled = extraMsg.value.trim().length === 0;
+    if (State.fortuneIndex >= 0) {
+      document.getElementById('form-link').href = buildFormUrl();
     }
   });
 
